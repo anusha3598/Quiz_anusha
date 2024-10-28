@@ -1,0 +1,149 @@
+<html>
+<head>
+    <style>
+        body {
+            background-image: url('/Users/anushamylavarapu/Desktop/Quiz_anusha/cofee_greek.jpeg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            font-family: 'Roboto', sans-serif; /* Apply Roboto font to the body */
+        }
+        caption {
+            font-family: 'Pacifico', cursive; /* Change to Pacifico font */
+            color: #522a2a; /* Maroon color */
+            font-size: 3em; /* Optional: Adjust font size */
+        }
+        textarea {
+            resize: none; /* Prevent resizing of the textarea */
+            width: 60%; /* Adjust width of the textarea */
+            height: 30%;
+            color: black; /* Text color inside the textarea */
+            background-color: rgba(199, 164, 139, 0.7); /* Light brown with 70% opacity */
+            border: 1px solid #5C3A1D; /* Dark brown border */
+            padding: 5px; /* Reduce padding for better spacing */
+            line-height: 1.2; /* Adjust line height to fill the box better */
+            font-family: Arial, sans-serif; /* Revert to Arial font for textarea */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+            transition: all 0.3s ease; /* Smooth transition for hover effects */
+        }
+        textarea:hover {
+            background-color: rgba(210, 180, 150, 0.8); /* Change background on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+        }
+        input[type="text"], select, input[type="button"] {
+            color: black; /* Text color inside the input */
+            background-color: rgba(199, 164, 139, 0.7); /* Light brown with 70% opacity */
+            border: 1px solid #5C3A1D; /* Dark brown border */
+            padding: 10px; /* Add padding for better spacing */
+            font-family: Arial, sans-serif; /* Revert to Arial font for input and select */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+            transition: all 0.3s ease; /* Smooth transition for hover effects */
+            cursor: pointer; /* Change cursor to pointer for buttons */
+        }
+        input[type="text"]:hover, select:hover, input[type="button"]:hover {
+            background-color: rgba(210, 180, 150, 0.8); /* Change background on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+        }
+        strong {
+            font-family: 'Pacifico', cursive; /* Apply Pacifico font to strong text */
+            color: #5C3A1D; /* Dark brown color for strong text */
+        }
+        .solution-response {
+            color: #5C3A1D; /* Dark brown color for solution and response */
+            font-family: 'Pacifico', cursive; /* Pacifico font for solution and response */
+            font-size: 1.2em; /* Slightly larger font size for emphasis */
+            margin: 10px 0; /* Add margin for spacing */
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"> <!-- Include Pacifico font -->
+</head>
+<body>
+
+    <div align="left">
+        <table border="0" cellspacing="0" cellpadding="0" width="100%">
+            <tr>
+                <td width="50%">
+                    <form method="POST" name="instantquiz">
+                        <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                            <caption><strong>Freshly Brewed Quiz</strong></caption>
+                            <tr>
+                                <td width="100%">
+                                    <div align="center">
+                                        <center>
+                                            <p><textarea rows="12" name="thequestion" cols="80" wrap="virtual"></textarea></p>
+                                        </center>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr align="center">
+                                <td width="50%">
+                                    <div align="center">
+                                        <center>
+                                            <p class="solution-response"><strong>Solution: </strong><input type="text" name="thesolution" size="35"></p>
+                                        </center>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr align="center">
+                                <td width="100%">
+                                    <div align="center">
+                                        <center>
+                                            <p class="solution-response"><strong>Your response:</strong> 
+                                                <select name="theresponse" size="1" onChange="responses()">
+                                                    <option value="-----">----</option>
+                                                    <option value="a">a</option>
+                                                    <option value="b">b</option>
+                                                    <option value="c">c</option>
+                                                    <option value="d">d</option>
+                                                </select> 
+                                                <input type="button" value="&lt;&lt;Back" name="B1" onClick="if (whichone>1){whichone--;generatequestions()}"> 
+                                                <input type="button" value="Next&gt;&gt;" name="B2" onClick="if (whichone<=total){whichone++;generatequestions()}"><br>
+                                                <small><a href="#" onClick="whichone=1;generatequestions();return false">Start Over</a> </small>
+                                                <input type="checkbox" name="cmode" value="ON"><small>Cheat Mode</small>
+                                            </p>
+                                            <p align="center"><font face="arial" size="-2">This Fun quiz is provided by</font><br> 
+                                                <font face="arial, helvetica" size="-2"><a href="http://javascriptkit.com">JavaScript Kit</a></font>
+                                            </p>
+                                        </center>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script src="popsolution.js"></script>
+    <script language="JavaScript1.1">
+        var whichone=1;
+        var tempmn=document.instantquiz.thequestion;
+        function generatequestions(){
+            document.instantquiz.theresponse.selectedIndex=0;
+            if (!document.instantquiz.cmode.checked||whichone>=total+1||whichone<=0)
+                document.instantquiz.thesolution.value='';
+            if (whichone>=total+1)
+                tempmn.value="End of quiz";
+            else {
+                tempmn.value=whichone+")"+question[whichone]+"\n\n"+"a)"+eval('choice'+whichone+'[1]')+"\n"+"b)"+eval('choice'+whichone+'[2]')+"\n"+"c)"+eval('choice'+whichone+'[3]')+"\n"+"d)"+eval('choice'+whichone+'[4]');
+                if (document.instantquiz.cmode.checked)
+                    document.instantquiz.thesolution.value=solution[whichone];
+            }
+        }
+
+        function responses(){
+            var temp2=document.instantquiz.theresponse;
+            var temp3=temp2.options[temp2.selectedIndex].text;
+            if (temp3!=solution[whichone]&&temp2.selectedIndex!=0)
+                document.instantquiz.thesolution.value="Sorry,the correct answer is "+solution[whichone];
+            else if(temp2.selectedIndex!=0)
+                document.instantquiz.thesolution.value=compliments[Math.round(Math.random()*compliments.length-1)];
+        }
+
+        generatequestions();
+    </script>
+</body>
+</html>
